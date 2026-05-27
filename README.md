@@ -1,14 +1,33 @@
 # converter-up
 
-A simple REST API that receives a YouTube (or any yt-dlp-supported) URL and returns the audio file as an MP3 download. Built with Node.js, Express, TypeScript, and yt-dlp.
+A web app and REST API that receives a YouTube (or any yt-dlp-supported) URL and returns the audio/video file as a download. Built with Node.js, Express, TypeScript, and yt-dlp.
 
 ## How it works
 
-1. Client sends a `POST /download` request with a URL.
-2. The server uses `yt-dlp` to fetch the video title and download the audio.
-3. The MP3 file is streamed back to the client, then deleted from the server.
+1. Open the web UI at `/` and paste a video URL, or send a request directly to the API.
+2. The server uses `yt-dlp` to fetch the video title and download the audio/video.
+3. The file is streamed back to the client, then deleted from the server.
+
+## Web UI
+
+A static frontend is served at `GET /`. It provides a URL input, a format selector, and a download button. No build step required — plain HTML, CSS, and JavaScript.
 
 ## API
+
+### `GET /download`
+
+**Query parameters:**
+
+| Field    | Type   | Required | Default | Examples                  |
+|----------|--------|----------|---------|---------------------------|
+| `url`    | string | yes      | —       | `?url=https://...`        |
+| `format` | string | no       | `mp3`   | `mp3`, `mp4`, `m4a`, `wav`, `ogg`, `webm` |
+
+**Example:**
+
+```
+GET /download?url=https://www.youtube.com/watch?v=...&format=mp3
+```
 
 ### `POST /download`
 
@@ -24,9 +43,9 @@ A simple REST API that receives a YouTube (or any yt-dlp-supported) URL and retu
 | Field    | Type   | Required | Default | Examples                  |
 |----------|--------|----------|---------|---------------------------|
 | `url`    | string | yes      | —       | —                         |
-| `format` | string | no       | `mp3`   | `mp3`, `mp4`, `m4a`, `wav`, `opus`, `webm` |
+| `format` | string | no       | `mp3`   | `mp3`, `mp4`, `m4a`, `wav`, `ogg`, `webm` |
 
-**Response:** binary audio file (`Content-Disposition: attachment`).
+**Response (both endpoints):** binary file (`Content-Disposition: attachment`).
 
 **Error responses:**
 
@@ -45,7 +64,7 @@ docker build -t mp3-up .
 docker run -p 3000:3000 mp3-up
 ```
 
-The API will be available at `http://localhost:3000`.
+The app will be available at `http://localhost:3000` (web UI) and `http://localhost:3000/download` (API).
 
 ## Running locally (without Docker)
 
@@ -96,6 +115,10 @@ mp3-up/
 │   │   └── logs.ts      # Winston logger config
 │   └── types/
 │       └── model.ts     # TypeScript interfaces
+├── static/              # Frontend (served at GET /)
+│   ├── index.html
+│   ├── index.js
+│   └── style.css
 ├── downloads/           # Temporary download directory (auto-created)
 ├── logs/                # Log files (app.log, error.log)
 ├── Dockerfile
