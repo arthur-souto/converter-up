@@ -29,7 +29,7 @@ app.post("/download", async (req, res) => {
     const outputPath = ytdlp.buildOutputPath(safeName, audioFormat);
     await ytdlp.execDownload({url, format: audioFormat}, {safeName, outputPath})
    
-    res.download(outputPath, `${safeName}.mp3`, (err) => {
+    res.download(outputPath, `${safeName}.${audioFormat}`, (err) => {
       fs.unlink(outputPath, () => {});
       if (err) logger.error("Error send client:", { error: err.message });
     });
