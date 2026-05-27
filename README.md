@@ -1,4 +1,4 @@
-# mp3-up
+# converter-up
 
 A simple REST API that receives a YouTube (or any yt-dlp-supported) URL and returns the audio file as an MP3 download. Built with Node.js, Express, TypeScript, and yt-dlp.
 

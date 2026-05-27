@@ -1,5 +1,5 @@
 import express from "express";
-import enviroments from "./enviroments";
+import enviroments from "./environments";
 import logger from "./config/logs";
 import fs from "fs";
 import { RequestDownload } from "./types/model";
